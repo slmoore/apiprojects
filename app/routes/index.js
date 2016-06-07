@@ -1,57 +1,48 @@
 'use strict';
 
 var path = process.cwd();
-var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
+//var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
 
 module.exports = function (app, passport) {
 
-	function isLoggedIn (req, res, next) {
-		if (req.isAuthenticated()) {
-			return next();
-		} else {
-			res.redirect('/login');
-		}
-	}
-
-	var clickHandler = new ClickHandler();
-
 	app.route('/')
-		.get(isLoggedIn, function (req, res) {
+		.get(function (req, res) {
 			res.sendFile(path + '/public/index.html');
 		});
-
-	app.route('/login')
+	
+	//time microservice
+	app.route('/:date')
 		.get(function (req, res) {
-			res.sendFile(path + '/public/login.html');
+			
+			//get parameter
+			var d = req.params.date;
+			var months = ["January","February","March","April","May","June",
+			              "July","August","September","October","November","December"];
+			              
+			//setup defaults
+			var obj = {};
+			obj.unix = null;
+			obj.natural = null;
+			
+			//unix to date response
+			if (d.match(/^[0-9]+$/)) {
+				obj.unix = Number(d);
+				d = new Date(Number(d)*1000);
+				obj.natural = months[d.getMonth()] + " ";
+                obj.natural+= d.getDate() + ", ";
+                obj.natural+= d.getFullYear();
+				res.json(obj);
+			} else {
+				//natural date response
+				d = new Date(d);
+				if (d.toString() === "Invalid Date") {
+			    	res.json(obj);
+			    } else {
+		            obj.unix = d.getTime()/1000;
+		            obj.natural = req.params.date;
+		            res.json(obj);
+			    }
+			}
 		});
-
-	app.route('/logout')
-		.get(function (req, res) {
-			req.logout();
-			res.redirect('/login');
-		});
-
-	app.route('/profile')
-		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/profile.html');
-		});
-
-	app.route('/api/:id')
-		.get(isLoggedIn, function (req, res) {
-			res.json(req.user.github);
-		});
-
-	app.route('/auth/github')
-		.get(passport.authenticate('github'));
-
-	app.route('/auth/github/callback')
-		.get(passport.authenticate('github', {
-			successRedirect: '/',
-			failureRedirect: '/login'
-		}));
-
-	app.route('/api/:id/clicks')
-		.get(isLoggedIn, clickHandler.getClicks)
-		.post(isLoggedIn, clickHandler.addClick)
-		.delete(isLoggedIn, clickHandler.resetClicks);
 };
+
