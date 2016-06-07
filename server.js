@@ -31,6 +31,7 @@ var passport = require('passport');
 //create express application and configuration
 var app = express();
 require('dotenv').load();
+app.use('/public', express.static(process.cwd() + '/public'));
 routes(app, passport);
 
 var port = process.env.PORT || 8080;
