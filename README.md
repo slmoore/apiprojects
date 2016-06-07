@@ -9,7 +9,7 @@
 </ol>
 
 <h3>Sample requests</h3>
-<div><code>https://smoore-timestamp.herokuapp.com/December%2015,%202015</code></div>
-<div><code>https://smoore-timestamp.herokuapp.com/1450137600</code></div>
+<div><code>https://smoore-timestamp.herokuapp.com/June%206,%202016</code></div>
+<div><code>https://smoore-timestamp.herokuapp.com/1465171200</code></div>
 <h3>Sample results</h3>
-<div><code>{ "unix": 1450137600, "natural": "December 15, 2015" }</code></div>
+<div><code>{ "unix": 1465171200, "natural": "June 6, 2016" }</code></div>
