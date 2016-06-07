@@ -1,6 +1,6 @@
 # Timestamp Microservice
 
-<p>Using: Node.js, Express, Bootstrap</p>
+<p>Using: Clementine.js, Node.js, Express, Bootstrap</p>
 
 ## User Stories
 
